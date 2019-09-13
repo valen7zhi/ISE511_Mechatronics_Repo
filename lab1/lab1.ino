@@ -1,12 +1,20 @@
 //lab1 Zhibo Wang
 
-int YellowPin = 13; //Yellow LED
-int RedPin = 12; //Red LED
-int GreenPin = 11; //Green LED
+const int YellowPin = 13; //Yellow LED
+const int RedPin = 12; //Red LED
+const int GreenPin = 11; //Green LED
 
-int blinkTime = 500 / 5; // .5 second
+const int blinkTime = 500 / 5; // .5 second
 
-int blinkcounter = 0;
+unsigned long previousmillis = 0; //Task3 Init
+const long interval = 250; // blinkTime for YellowPin
+
+int blinkcounterY = 0; //Task3 blinkcounter 
+int blinkcounterRG = 0; 
+
+//int ledstate = LOW;
+//int ledstate2 = LOW;
+//int ledstate3 = HIGH;
 
 void setup() {
   // put your setup code here, to run once:
@@ -15,64 +23,72 @@ void setup() {
   pinMode(RedPin, OUTPUT);
   pinMode(GreenPin, OUTPUT);
 
-  blinkThree(10 * 3, blinkTime); //blink 10 times, on and off for .5 second
+  blinkThree(10 * 3, blinkTime); //Task1 blink 10 times, on and off for .5 second
 
-  blinkAll(blinkTime); //blink all for 10 timesdi
+  blinkAll(blinkTime); //Task2 blink all for 10 timesdi
+
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
-    if (blinkcounter < 60)
-    {
-      digitalWrite(YellowPin,HIGH);
-      blinkcounter++;
-      delay(250);
-      digitalWrite(YellowPin,LOW);
-      delay(250);
-      
-      blink23();
-      blinkcounter++;
 
-      
-      digitalWrite(YellowPin,HIGH);
-      blinkcounter++;
-      delay(250);
-      digitalWrite(GreenPin,LOW);
-      digitalWrite(YellowPin,LOW);
-      delay(250);
-      
-    }
-    else if (blinkcounter > 60 && blinkcounter < 100)
-    {
-      digitalWrite(YellowPin,HIGH);
-      blinkcounter++;
-      delay(250);
-      digitalWrite(YellowPin,LOW);
-      delay(250);
-    }
-    else
-    {
-      digitalWrite(YellowPin,LOW);
-      digitalWrite(GreenPin,LOW);
-      digitalWrite(RedPin,LOW);
-    }
+  if (blinkcounterY < 100)
+  {
+    delay(interval);
+    digitalWrite(YellowPin, HIGH);
+    digitalWrite(RedPin, HIGH);
+    digitalWrite(GreenPin, LOW);
+    blinkcounterY++;
+    
   
+    delay(interval);
+    digitalWrite(YellowPin, LOW);
+    digitalWrite(RedPin, HIGH);
+    digitalWrite(GreenPin, LOW);
+    blinkcounterY++;
+    blinkcounterRG++;
+    
+    delay(interval);
+    digitalWrite(YellowPin, HIGH);
+    digitalWrite(RedPin, LOW);
+    digitalWrite(GreenPin, HIGH);
+    blinkcounterY++;
+  
+    delay(interval);
+    digitalWrite(YellowPin, LOW);
+    digitalWrite(RedPin, LOW);
+    digitalWrite(GreenPin, HIGH);
+    blinkcounterY++;
+    blinkcounterRG++;
 
+  }
+  else if (blinkcounterRG < 60)
+  {
+    
+    digitalWrite(YellowPin,LOW);
+    delay(interval*2);
+    digitalWrite(RedPin,HIGH);
+    digitalWrite(GreenPin,LOW);
+    delay(interval*2);
+    digitalWrite(RedPin,LOW);
+    digitalWrite(GreenPin,HIGH);
+
+    blinkcounterRG++;
+   
+    
+  }
+
+  else
+  {
+    digitalWrite(YellowPin,LOW);
+    digitalWrite(RedPin,LOW);
+    digitalWrite(GreenPin,LOW);
+  }
+  
 }
 
-void blink23()
-{
-  digitalWrite(YellowPin,HIGH);
-  digitalWrite(RedPin,HIGH);
-  digitalWrite(GreenPin,LOW);
-  delay(250);
-  digitalWrite(YellowPin,LOW);
-  digitalWrite(RedPin,LOW);
-  digitalWrite(GreenPin,HIGH);
-  
-}
+
 
 
 
