@@ -4,7 +4,7 @@ const int YellowPin = 13; //Yellow LED
 const int RedPin = 12; //Red LED
 const int GreenPin = 11; //Green LED
 
-const int blinkTime = 500 / 5; // .5 second
+const int blinkTime = 500; // .5 second
 
 unsigned long previousmillis = 0; //Task3 Init
 const long interval = 250; // blinkTime for YellowPin
