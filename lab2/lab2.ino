@@ -46,7 +46,7 @@ void loop()
     // Serial.println(init_humidity);
     Serial.print("Humidity = ");
     Serial.println(realt_humidity);
-    if (realt_humidity > 60) // rule-of-thumb wet value set for 60. more robust design needed for better algorithm
+    if (realt_humidity > 75) // rule-of-thumb wet value set for 60. more robust design needed for better algorithm
     {
         ledblinker();
         motorswitch();
