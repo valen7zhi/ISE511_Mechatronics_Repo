@@ -1,71 +1,107 @@
 /** lab3 Zhibo Wang
- *  Motor Control
+ *  Motor Control with tachometer
  */
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(8, 9, 10, 11, 12, 13);
 
 const int motorpin = 3;
-const int speed = 70;
+int speed; // range 0 ~ 255
+// int passFlag = 0;
 
-const int Vin = 5;
-const float R1 = 10000;
-const int sensor = A0;
-
-int raw = 0;
-float Vout = 0;
-float R2 = 0;
-float buffer = 0;
+const int irLED = 7;
+volatile byte breakNum;
+unsigned int rpm;
 
 void setup()
 {
     Serial.begin(9600);
+    lcd.begin(16, 2);
+
     pinMode(motorpin, OUTPUT);
 
-    // digitalWrite(greenled_pin, LOW);
-    // digitalWrite(blueled_pin, LOW);
-    // delay(1000);
+    pinMode(irLED, OUTPUT);
+    digitalWrite(irLED, HIGH);
+    attachInterrupt(0, breakCount, FALLING);
+
+    // analogWrite(motorpin, speed);
+    // delay(3000);
+    // digitalWrite(motorpin, LOW);
+
+    // rpm = 0;
+    // breakNum = 0;
+
+    tableRotate();
 }
 
 void loop()
 {
-    // Serial.print("Humidity = ");
-    // Serial.println(realt_humidity);
+    // if (passFlag == 0)
+    // {
+    //     tableRotate();
+    //     passFlag++;
+    // }
 
-    motorswitch();
-    raw = analogRead(sensor);
+    // delay(1000);
 
-    if (raw)
-    {
-        buffer = raw * Vin;
-        Vout = buffer / 1024.0;
-        buffer = Vin / Vout - 1;
-        R2 = R1 * buffer;
-        Serial.print("Vout: ");
-        Serial.println(Vout);
-        Serial.println(R2);
-        delay(1000);
-    }
-    // ledblinker();
+    // detachInterrupt(0);
+
+    // rpm = 60 * breakNum;
+
+    // breakNum = 0;
+    // motorswitch();
+
+    // attachInterrupt(0, breakCount, FALLING);
 }
 
-void motorswitch()
-{
-    analogWrite(motorpin, speed);
-    delay(7000); // run fan for seven seconds and then turn it off as required
-    analogWrite(motorpin, 0);
-}
-
-// void ledblinker()
+// void motorswitch()
 // {
-//     for (int i = 0; i < 3; i++)
-//     {
-//         digitalWrite(greenled_pin, HIGH);
-//         digitalWrite(blueled_pin, LOW);
-//         delay(blinkinterval);
-
-//         digitalWrite(greenled_pin, LOW);
-//         digitalWrite(blueled_pin, HIGH);
-//         delay(blinkinterval);
-//     }
-
-//     digitalWrite(greenled_pin, LOW);
-//     digitalWrite(blueled_pin, LOW);
+//     analogWrite(motorpin, speed); // run fan for seven seconds and then turn it off as required
 // }
+
+void breakCount()
+{
+    breakNum++;
+}
+
+void tableRotate()
+{
+    lcddp("Max Speed");
+    speed = 255;
+    analogWrite(motorpin, speed);
+    delay(4000);
+
+    lcddp("0");
+    speed = 0;
+    analogWrite(motorpin, speed);
+    delay(2000);
+
+    lcddp("Half Speed");
+    speed = 60;
+    analogWrite(motorpin, speed);
+    delay(5000);
+
+    lcddp("0");
+    speed = 0;
+    analogWrite(motorpin, speed);
+    delay(2000);
+
+    lcddp("0.75 Speed");
+    speed = 180;
+    analogWrite(motorpin, speed);
+    delay(3000);
+
+    lcddp("0");
+    speed = 0;
+    analogWrite(motorpin, speed);
+}
+
+void lcddp(String spd)
+{
+    lcd.clear();
+    lcd.print("RPM = ");
+    lcd.print(spd);
+
+    Serial.print("rpm = ");
+    Serial.println(spd);
+}
