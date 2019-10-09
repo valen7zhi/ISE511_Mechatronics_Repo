@@ -9,7 +9,7 @@ const int motorpin = 3;
 int speed; // range 0 ~ 255
 // int passFlag = 0;
 
-const int irLED = 7;
+const int irLED = 1;
 volatile byte breakNum;
 unsigned int rpm;
 
@@ -20,18 +20,19 @@ void setup()
 
     pinMode(motorpin, OUTPUT);
 
+    attachInterrupt(0, breakCount, FALLING);
     pinMode(irLED, OUTPUT);
     digitalWrite(irLED, HIGH);
-    attachInterrupt(0, breakCount, FALLING);
 
+    rpm = 0;
+    breakNum = 0;
+
+    delay(1000);
+
+    tableRotate();
     // analogWrite(motorpin, speed);
     // delay(3000);
     // digitalWrite(motorpin, LOW);
-
-    // rpm = 0;
-    // breakNum = 0;
-
-    tableRotate();
 }
 
 void loop()
@@ -59,49 +60,73 @@ void loop()
 //     analogWrite(motorpin, speed); // run fan for seven seconds and then turn it off as required
 // }
 
-void breakCount()
-{
-    breakNum++;
-}
-
 void tableRotate()
 {
-    lcddp("Max Speed");
+
     speed = 255;
     analogWrite(motorpin, speed);
+    lcddp("Max Speed");
     delay(4000);
+    lcd.clear();
 
-    lcddp("0");
     speed = 0;
     analogWrite(motorpin, speed);
+    lcddp("0");
     delay(2000);
+    lcd.clear();
 
+    speed = 80;
+    analogWrite(motorpin, speed);
     lcddp("Half Speed");
-    speed = 60;
-    analogWrite(motorpin, speed);
     delay(5000);
+    lcd.clear();
 
-    lcddp("0");
     speed = 0;
     analogWrite(motorpin, speed);
+    lcddp("0");
     delay(2000);
+    lcd.clear();
 
+    speed = 200;
+    analogWrite(motorpin, speed);
     lcddp("0.75 Speed");
-    speed = 180;
-    analogWrite(motorpin, speed);
     delay(3000);
+    lcd.clear();
 
-    lcddp("0");
     speed = 0;
+    lcddp("0");
     analogWrite(motorpin, speed);
+    lcd.clear();
 }
 
 void lcddp(String spd)
 {
-    lcd.clear();
+    delay(1000);
+
+    detachInterrupt(0);
+    rpm = 60 * breakNum;
+
+    if (spd == "0")
+    {
+        rpm = 0;
+    }
+    // breakNum = 0;
+
     lcd.print("RPM = ");
-    lcd.print(spd);
+    // lcd.print(spd);
+
+    lcd.setCursor(0, 2);
+    lcd.print(rpm);
 
     Serial.print("rpm = ");
-    Serial.println(spd);
+    Serial.println(rpm);
+
+    attachInterrupt(0, breakCount, FALLING);
+    rpm = 0;
+    breakNum = 0;
+}
+
+void breakCount()
+{
+    breakNum++;
 }
