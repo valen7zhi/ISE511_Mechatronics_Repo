@@ -1,32 +1,24 @@
 #include <LiquidCrystal.h>
 
+// initialize the library by associating any needed LCD interface pin
+// with the arduino pin number it is connected to
+
 LiquidCrystal lcd(8, 9, 10, 11, 12, 13);
 
 void setup()
 {
+    // set up the LCD's number of columns and rows:
     lcd.begin(16, 2);
+    // Print a message to the LCD.
+    lcd.print("hello, world!");
 }
 
 void loop()
 {
-    lcd.print("Arduino");
-    delay(1000);
-
-    lcd.setCursor(0, 2);
-    lcd.print("LCD");
-    delay(1000);
-
-    lcd.clear();
-
-    lcd.blink();
-    delay(3000);
-    lcd.setCursor(16, 2);
-    delay(3000);
-    lcd.noBlink();
-
-    lcd.cursor();
-    delay(3000);
-    lcd.noCursor();
-
-    lcd.clear();
+    // Turn off the display:
+    // lcd.noDisplay();
+    // delay(500);
+    // // Turn on the display:
+    // lcd.display();
+    // delay(500);
 }
