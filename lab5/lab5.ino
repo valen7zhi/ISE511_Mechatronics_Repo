@@ -8,7 +8,7 @@ LiquidCrystal lcd(8, 9, 10, 11, 12, 13);
 
 const int motorPin = 3;
 const int maxPWM = 255;
-const int adjPWM = 170;
+const int adjPWM = 230;
 
 void setup()
 {
@@ -29,30 +29,30 @@ void motionControl()
 {
 
     lcd.print("Moving 1 inch");
-    analogWrite(motorPin, maxPWM); // torque initializer
-    delay(50);
+    // analogWrite(motorPin, maxPWM); // torque initializer
+    // delay(150);
     analogWrite(motorPin, adjPWM);
-    delay(1500);
+    delay(1200);
     analogWrite(motorPin, 0);
     delay(3000);
 
     lcd.clear();
     lcd.print("Moving 3/4 inch");
-    analogWrite(motorPin, maxPWM); // torque initializer
-    delay(50);
+    // analogWrite(motorPin, maxPWM); // torque initializer
+    // delay(150);
     analogWrite(motorPin, adjPWM);
-    delay(1100);
+    delay(900);
     analogWrite(motorPin, 0);
     delay(3000);
 
     lcd.clear();
     lcd.print("Moving 1 1/4 inch");
-    analogWrite(motorPin, maxPWM); // torque initializer
-    delay(50);
+    // analogWrite(motorPin, maxPWM); // torque initializer
+    // delay(50);
     analogWrite(motorPin, adjPWM);
-    delay(1850);
+    delay(1300);
     analogWrite(motorPin, 0);
 
     lcd.clear();
-    lcd.print("All steps Done!");
+    lcd.print("All Steps Done!");
 }
