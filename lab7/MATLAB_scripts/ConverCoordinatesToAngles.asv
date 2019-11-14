@@ -1,0 +1,11 @@
+function [ alpha, beta] = ConverCoordinatesToAngles(x, y)
+% alpha beta converter
+height = 9.75;
+A = sqrt((height*height+y*transpose(y)));
+
+alpha = (180.0/pi) * atan(y/height);
+if (alpha.
+beta = (180.0/pi) * atan(x/A);
+
+end
+
